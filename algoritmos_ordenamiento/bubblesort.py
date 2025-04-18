@@ -1,23 +1,38 @@
-def bubble_sort(arr):
-    """
-    Implementación de Bubble Sort.
-    Complejidad: O(n²) en tiempo, O(1) en espacio
-    """
-    n = len(arr)
-    # Recorremos la lista n veces
+def bubblesort(data, key=None):
+    result = data.copy()
+    n = len(result)
+
+    def get_key(item):
+        if key is not None:
+            return key(item)
+        elif isinstance(item, (list, tuple)) and len(item) > 1:
+            return item[1]
+        return item
+
+    def get_term(item):
+        if isinstance(item, (list, tuple)) and len(item) > 0:
+            return str(item[0]).lower()
+        return str(item).lower()
+    
     for i in range(n):
-        # Flag para optimizar: si no hay intercambios, la lista ya está ordenada
         swapped = False
         
-        # En cada iteración, el elemento más grande flota hasta su posición final
         for j in range(0, n - i - 1):
-            # Si el elemento actual es mayor que el siguiente, intercambiarlos
-            if arr[j] > arr[j + 1]:
-                arr[j], arr[j + 1] = arr[j + 1], arr[j]
+            key_j = get_key(result[j])
+            key_j_plus_1 = get_key(result[j + 1])
+
+            if key_j < key_j_plus_1:
+                result[j], result[j + 1] = result[j + 1], result[j]
                 swapped = True
-        
-        # Si no hubo intercambios en esta pasada, la lista ya está ordenada
+            elif key_j == key_j_plus_1:
+                term_j = get_term(result[j])
+                term_j_plus_1 = get_term(result[j + 1])
+                
+                if term_j > term_j_plus_1:
+                    result[j], result[j + 1] = result[j + 1], result[j]
+                    swapped = True
+
         if not swapped:
             break
     
-    return arr
+    return result
